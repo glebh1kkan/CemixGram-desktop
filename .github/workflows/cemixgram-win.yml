@@ -52,14 +52,14 @@ jobs:
           toolset: 14.44
 
       - name: ThirdParty cache.
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ env.TBUILD }}\ThirdParty
           key: ${{ runner.OS }}-x64-third-party-${{ env.CACHE_KEY }}
           restore-keys: ${{ runner.OS }}-x64-third-party-
 
       - name: Libraries cache.
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ${{ env.LibrariesPath }}\*
