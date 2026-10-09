@@ -93,7 +93,7 @@ jobs:
           move %OUT%\Telegram.exe artifact/
           move %OUT%\Updater.exe artifact/
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         name: Upload artifact.
         with:
           name: CemixGram-win64
