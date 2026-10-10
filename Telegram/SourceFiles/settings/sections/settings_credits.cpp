@@ -7,6 +7,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "settings/sections/settings_credits.h"
 
+#include <QtGui/QDesktopServices>
+
 #include "api/api_credits.h"
 #include "api/api_earn.h"
 #include "api/api_statistics.h"
@@ -1116,48 +1118,12 @@ BuyStarsHandler::~BuyStarsHandler() = default;
 Fn<void()> BuyStarsHandler::handler(
 		std::shared_ptr<::Main::SessionShow> show,
 		Fn<void()> paid) {
-	const auto optionsBox = [=](not_null<Ui::GenericBox*> box) {
-		box->setStyle(st::giveawayGiftCodeBox);
-		box->setWidth(st::boxWideWidth);
-		box->setTitle(tr::lng_credits_summary_options_subtitle());
-		const auto inner = box->verticalLayout();
-		const auto self = show->session().user();
-		const auto options = _api
-			? _api->options()
-			: Data::CreditTopupOptions();
-		const auto amount = CreditsAmount();
-		const auto weak = base::make_weak(box);
-		FillCreditOptions(show, inner, self, amount, [=] {
-			if (const auto strong = weak.get()) {
-				strong->closeBox();
-			}
-			if (const auto onstack = paid) {
-				onstack();
-			}
-		}, box->showFinishes(), nullptr, options);
-
-		box->addButton(tr::lng_close(), [=] {
-			box->closeBox();
-		});
+	// CemixGram: stars are sold by the store bot, not via store billing.
+	// Opened externally: the bot lives on official Telegram, so in-app
+	// resolve (our server doesn't know this username) would dead-end.
+	return [=] {
+		QDesktopServices::openUrl(QUrl(u"https://t.me/CemixGram_bot"_q));
 	};
-	return crl::guard(this, [=] {
-		if (_api && !_api->options().empty()) {
-			_loading = false;
-			show->show(Box(crl::guard(this, optionsBox)));
-		} else {
-			_loading = true;
-			const auto user = show->session().user();
-			_api = std::make_unique<Api::CreditsTopupOptions>(user);
-			_api->request(
-			) | rpl::on_error_done([=](const QString &error) {
-				_loading = false;
-				show->showToast(error);
-			}, [=] {
-				_loading = false;
-				show->show(Box(crl::guard(this, optionsBox)));
-			}, _lifetime);
-		}
-	});
 }
 
 rpl::producer<bool> BuyStarsHandler::loadingValue() const {

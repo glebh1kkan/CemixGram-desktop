@@ -1276,10 +1276,16 @@ void Application::checkStartUrls() {
 
 bool Application::openLocalUrl(const QString &url, QVariant context) {
 	const auto urlTrimmed = url.trimmed();
+	// CemixGram: accept our own scheme everywhere tg:// works.
+	const auto normalized = urlTrimmed.startsWith(
+		u"cemix://"_q,
+		Qt::CaseInsensitive)
+		? (u"tg://"_q + urlTrimmed.mid(u"cemix://"_q.size()))
+		: urlTrimmed;
 	const auto protocol = u"tg://"_q;
-	if (urlTrimmed.startsWith(protocol, Qt::CaseInsensitive)
+	if (normalized.startsWith(protocol, Qt::CaseInsensitive)
 		&& !passcodeLocked()) {
-		const auto command = urlTrimmed.mid(protocol.size());
+		const auto command = normalized.mid(protocol.size());
 		const auto my = context.value<ClickHandlerContext>();
 		const auto controller = my.sessionWindow.get()
 			? my.sessionWindow.get()
@@ -1290,7 +1296,7 @@ bool Application::openLocalUrl(const QString &url, QVariant context) {
 			return true;
 		}
 	}
-	return openCustomUrl("tg://", LocalUrlHandlers(), url, context);
+	return openCustomUrl("tg://", LocalUrlHandlers(), normalized, context);
 }
 
 bool Application::openInternalUrl(const QString &url, QVariant context) {

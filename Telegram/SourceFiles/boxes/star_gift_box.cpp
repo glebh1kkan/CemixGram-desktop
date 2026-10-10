@@ -4493,11 +4493,12 @@ void RequestOurForm(
 			const auto &invoice = data.vinvoice().data();
 			const auto prices = invoice.vprices().v;
 			if (show->valid() && !prices.isEmpty()) {
-				const auto price = prices.front().data().vamount().v;
+					const auto price = prices.front().data().vamount().v;
 				const auto currency = qs(invoice.vcurrency());
+				// CemixGram: GRAM invoices ride the TON machinery (same nanos).
 				const auto amount = (currency == Ui::kCreditsCurrency)
 					? CreditsAmount(price)
-					: (currency == u"TON"_q)
+					: (currency == u"TON"_q || currency == u"GRAM"_q)
 					? CreditsAmount(
 						price / Ui::kNanosInOne,
 						price % Ui::kNanosInOne,
@@ -4517,9 +4518,10 @@ void RequestOurForm(
 			const auto &prices = data.vinvoice().data().vprices().v;
 			if (!prices.empty()) {
 				const auto price = prices.front().data().vamount().v;
+				// CemixGram: GRAM invoices ride the TON machinery (same nanos).
 				const auto amount = (currency == Ui::kCreditsCurrency)
 					? CreditsAmount(price)
-					: (currency == u"TON"_q)
+					: (currency == u"TON"_q || currency == u"GRAM"_q)
 					? CreditsAmount(
 						price / Ui::kNanosInOne,
 						price % Ui::kNanosInOne,

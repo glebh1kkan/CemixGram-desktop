@@ -5864,9 +5864,9 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_suggest_warn_text_ton" = "You won't receive **Grams** for the post if you delete it now. The post must remain visible for at least **24 hours** after it was published.";
 "lng_suggest_warn_delete_anyway" = "Delete Anyway";
 "lng_suggest_low_ton_title" = "{amount} Grams Needed";
-"lng_suggest_low_ton_text" = "You can add funds to your balance via the third-party platform Fragment.";
-"lng_suggest_low_ton_fragment" = "Add Funds via Fragment";
-"lng_suggest_low_ton_fragment_url" = "https://fragment.com/ads/topup";
+"lng_suggest_low_ton_text" = "You can buy grams for gifts in our Telegram bot.";
+"lng_suggest_low_ton_fragment" = "Buy Grams in Bot";
+"lng_suggest_low_ton_fragment_url" = "https://t.me/CemixGram_bot";
 
 "lng_reply_in_another_title" = "Reply in...";
 "lng_reply_in_another_chat" = "Reply in Another Chat";
